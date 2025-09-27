@@ -1,16 +1,21 @@
-# Usando uma imagem base específica e slim
+# imagem python
 FROM python:3.9-slim-buster
 
+# Definindo o diretório de trabalho dentro do contêiner
 WORKDIR /app
-COPY requirements.txt .
+
+# Copiando o arquivo de dependências
+COPY requirements.txt ./
+
+# Instalando as dependências
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiando todo o resto da aplicação
 COPY . .
 
-# --- MELHORIA DE SEGURANÇA (HARDENING) ---
-# 1. Cria um usuário específico para a aplicação
+# SEGURANÇA: Criando e mudando para um usuário não-root
 RUN useradd --create-home appuser
-# 2. Muda para esse usuário
-USER 1001
-# -----------------------------------------
+USER appuser
 
-CMD ["python", "app.py"]
+# Comando para executar a aplicação
+CMD [ "python", "app.py" ]
