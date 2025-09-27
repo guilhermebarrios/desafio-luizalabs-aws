@@ -10,7 +10,7 @@ COPY . .
 # 1. Cria um usuário específico para a aplicação
 RUN useradd --create-home appuser
 # 2. Muda para esse usuário
-USER guilherme
+USER 1001
 # -----------------------------------------
 
 CMD ["python", "app.py"]
