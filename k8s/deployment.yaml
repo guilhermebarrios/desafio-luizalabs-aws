@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: hello
-        image: <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/hello:latest
+        image: 288761731142.dkr.ecr.us-east-1.amazonaws.com/hello:latest
         ports:
         - containerPort: 8080
         readinessProbe:
