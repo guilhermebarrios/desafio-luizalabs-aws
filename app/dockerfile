@@ -1,6 +1,16 @@
-FROM python:3.11-slim
+# Usando uma imagem base específica e slim
+FROM python:3.9-slim-buster
+
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-CMD ["python","app.py"]
+
+# --- MELHORIA DE SEGURANÇA (HARDENING) ---
+# 1. Cria um usuário específico para a aplicação
+RUN useradd --create-home appuser
+# 2. Muda para esse usuário
+USER guilherme
+# -----------------------------------------
+
+CMD ["python", "app.py"]
