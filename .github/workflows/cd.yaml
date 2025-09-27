@@ -48,7 +48,9 @@ jobs:
         aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}
 
     - name: Deploy no Kubernetes
+      env:
+        IMAGE_URI: ${{ steps.build-image.outputs.image_uri }}
       run: |
-        export KUBE_DEPLOYMENT_FILE=./kubernetes/deployment.yaml
-        sed -i 's|image:.*|image: ${{ steps.build-image.outputs.image_uri }}|g' $KUBE_DEPLOYMENT_FILE
-        kubectl apply -f ./kubernetes/
+        KUBE_DEPLOYMENT_FILE=./k8s/deployment.yaml
+        sed -i "s|image:.*|image: $IMAGE_URI|g" $KUBE_DEPLOYMENT_FILE
+        kubectl apply -f ./k8s/
