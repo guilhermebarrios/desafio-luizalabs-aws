@@ -3,11 +3,8 @@ name: CD - Deploy da Aplicação HelloWorld no EKS
 
 on:
   push:
+    # a 'trigger' será o push na main
     branches: [ main ]
-    # GATILHO INTELIGENTE: Rodar apenas se houver mudanças na app ou nos manifestos K8s
-    paths:
-      - 'app/**'
-      - 'kubernetes/**'
 
 env:
   AWS_REGION: us-east-1
