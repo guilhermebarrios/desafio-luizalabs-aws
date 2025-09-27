@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      containers:
+      - name: hello
+        image: <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/hello:latest
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet: { path: "/", port: 8080 }
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet: { path: "/", port: 8080 }
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        resources:
+          requests: { cpu: "100m", memory: "128Mi" }
+          limits: { cpu: "250m", memory: "256Mi" }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: hello
+  ports:
+    - port: 80
+      targetPort: 8080
