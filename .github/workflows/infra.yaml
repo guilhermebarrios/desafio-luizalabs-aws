@@ -1,0 +1,53 @@
+# .github/workflows/infra.yml
+name: CI/CD - Infraestrutura com Terraform
+
+on:
+  push:
+    branches: [ main ]
+    # Rodar apenas se houver mudanças na pasta de infra
+    paths:
+      - 'infra/**'
+  pull_request:
+    paths:
+      - 'infra/**'
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read # Necessário para o checkout
+      pull-requests: write # Necessário para postar o 'plan' no PR
+
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v3
+
+    - name: Configura credenciais AWS
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        # arn da function criada no IAM
+        role-to-assume: arn:aws:iam::288761731142:role/github-desafio-role
+        aws-region: us-east-1 # região
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.5.0
+
+    - name: Terraform Init
+      id: init
+      working-directory: ./infra
+      run: terraform init
+
+    - name: Terraform Plan
+      id: plan
+      working-directory: ./infra
+      # Roda 'plan' para todos os eventos, mas só gera o arquivo de saída para PRs
+      run: terraform plan -no-color
+
+    - name: Terraform Apply
+      # Roda 'apply' APENAS em push para a branch 'main'
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      working-directory: ./infra
+      run: terraform apply -auto-approve

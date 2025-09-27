@@ -1,8 +1,13 @@
-name: CD - Deploy da App HelloWorld no EKS
+# .github/workflows/cd.yml
+name: CD - Deploy da Aplicação HelloWorld no EKS
 
 on:
   push:
     branches: [ main ]
+    # GATILHO INTELIGENTE: Rodar apenas se houver mudanças na app ou nos manifestos K8s
+    paths:
+      - 'app/**'
+      - 'kubernetes/**'
 
 env:
   AWS_REGION: us-east-1
@@ -23,30 +28,15 @@ jobs:
     - name: Configura credenciais AWS
       uses: aws-actions/configure-aws-credentials@v4
       with:
+        # arn da function criada no IAM
         role-to-assume: arn:aws:iam::288761731142:role/github-desafio-role
         aws-region: ${{ env.AWS_REGION }}
 
-    # 1. Instala Terraform
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.5.0
-
-    # 2. Inicializa Terraform
-    - name: Terraform Init
-      run: terraform init ./infra
-
-    # 3. Aplica Terraform (cria ECR, EKS etc)
-    - name: Terraform Apply
-      run: terraform apply -auto-approve ./infra
-
-    # 4. Faz login no Amazon ECR
     - name: Login no Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
 
-    # 5. Build, tag e push da imagem Docker
-    - name: Build e Push Docker
+    - name: Build, tag e push da imagem Docker
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -56,12 +46,10 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image_uri=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-    # 6. Configura kubectl para EKS
     - name: Configura kubectl para o EKS
       run: |
         aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}
 
-    # 7. Deploy no Kubernetes
     - name: Deploy no Kubernetes
       run: |
         export KUBE_DEPLOYMENT_FILE=./kubernetes/deployment.yaml
