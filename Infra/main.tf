@@ -54,13 +54,13 @@ module "eks" {
     default_nodes = {
       instance_types = ["t3.small"]
       min_size       = 1
-      max_size       = 2
-      desired_size   = 1
+      max_size       = 3
+      desired_size   = 2
     }
   }
 
   tags = {
-    Environment = "challenge-dev"
+    Environment = "desafio-devops"
     Terraform   = "true"
   }
 }
@@ -78,7 +78,7 @@ resource "aws_ecr_repository" "app_ecr_repo" {
   force_delete = true
 
   tags = {
-    Environment = "challenge-dev"
+    Environment = "desafio-devops"
     Terraform   = "true"
   }
 }
