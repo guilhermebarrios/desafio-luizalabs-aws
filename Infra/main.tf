@@ -56,7 +56,7 @@ module "eks" {
   subnet_ids = module.vpc.private_subnets # Nós apenas em subnets privadas
 
   cluster_endpoint_public_access = true
-  cluster_endpoint_public_access_cidrs = ["189.15.43.58/32"] # Altere aqui!
+  cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"] # Altere aqui!
 
   enable_cluster_creator_admin_permissions = true
 

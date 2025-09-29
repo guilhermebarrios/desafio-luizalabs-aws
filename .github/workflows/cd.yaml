@@ -52,6 +52,5 @@ jobs:
       env:
         IMAGE_URI: ${{ steps.build-image.outputs.image_uri }}
       run: |
-        KUBE_DEPLOYMENT_FILE=./k8s/deployment.yaml
-        sed -i "s|image:.*|image: $IMAGE_URI|g" $KUBE_DEPLOYMENT_FILE
+        kubectl set image deployment/hello hello=$IMAGE_URI --record
         kubectl apply -f ./k8s/
