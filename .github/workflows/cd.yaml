@@ -9,7 +9,7 @@ on:
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: hello
-  EKS_CLUSTER_NAME: cluster-desafio-luizalabs
+  EKS_CLUSTER_NAME: cluster-desafio-luizalabs-v2
 
 jobs:
   deploy:
