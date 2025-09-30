@@ -57,3 +57,13 @@ jobs:
         # A pipeline só continuará depois que os novos pods estiverem 'Running'.
         kubectl rollout status deployment/hello
 
+
+
+
+
+
+
+
+
+
+        
