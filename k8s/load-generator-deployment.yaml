@@ -1,0 +1,21 @@
+# kubernetes/load-generator-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-generator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: load-generator
+  template:
+    metadata:
+      labels:
+        app: load-generator
+    spec:
+      containers:
+      - name: load-generator-container
+        image: busybox
+        # Gerando a carga contínua no serviço
+        command: [ "/bin/sh", "-c" ]
+        args: [ "while true; do wget -q -O- http://hello-svc; done" ]
