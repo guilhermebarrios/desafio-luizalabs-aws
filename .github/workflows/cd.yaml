@@ -45,7 +45,7 @@ jobs:
         
     - name: Configura kubectl para o EKS
       run: |
-        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }} --role-arn:aws:iam::288761731142:role/github-desafio-role
+        aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }} --role-arn:aws:iam::288761731142:role/github-desafio-role
        
     - name: Deploy no Kubernetes
       env:
