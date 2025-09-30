@@ -8,7 +8,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: helloworld-deployment # O nome do deployment
+    name: hello # O nome do deployment
   # Regras de escalabilidade
 
   minReplicas: 2 # Mínimo de 2 pods
