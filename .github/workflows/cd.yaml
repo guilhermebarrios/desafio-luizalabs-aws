@@ -50,20 +50,21 @@ jobs:
       env:
         IMAGE_URI: ${{ steps.build-image.outputs.image_uri }}
       run: |
-        # Comando imperativo para atualizar a imagem e iniciar o rollout
-        kubectl set image deployment/hello hello=$IMAGE_URI
+        #Passo 1: Usando 'sed' para atualizar o template apenas no deployment.yaml
+        sed -i "s|image:.*|image: $IMAGE_URI|g" $KUBE_MANIFEST_PATH/deployment.yaml
 
-        # Monitorar o status do deploy e garantir que ele terminou com sucesso
-        # A pipeline só continuará depois que os novos pods estiverem 'Running'.
-        kubectl rollout status deployment/hello
+        # Passo 2: criar OU atualizar todos os recursos da pasta
+        kubectl apply -f $KUBE_MANIFEST_PATH
 
-
-
-
+        # Passo 3: Verifica o status do deploy específico que foi alterado
+        kubectl rollout status deployment/$DEPLOYMENT_NAME
 
 
 
 
 
 
-        
+
+
+
+
