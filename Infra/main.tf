@@ -21,7 +21,7 @@ module "vpc" {
   name = "desafio-vpc-luizalabs"
   cidr = "10.0.0.0/16"
 
-  azs             = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  azs             = ["us-east-1a", "us-east-1b", "us-east-1c"] # Zonas de disponibilidade (3 AZs), (Alta disponibilidade)
   private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
 
@@ -31,7 +31,7 @@ module "vpc" {
   # Dentro do module "vpc"
   public_subnet_tags = {
     "kubernetes.io/cluster/cluster-desafio-luizalabs-v2" = "shared" # <--- Atualize aqui
-    "kubernetes.io/role/elb"                               = "1"
+    "kubernetes.io/role/elb"                             = "1"
   }
   private_subnet_tags = {
     "kubernetes.io/cluster/cluster-desafio-luizalabs-v2" = "shared" # <--- E aqui também
@@ -55,10 +55,15 @@ module "eks" {
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets # Nós apenas em subnets privadas
 
-  cluster_endpoint_public_access = true
+  cluster_endpoint_public_access       = true
   cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"] # Altere aqui!
 
   enable_cluster_creator_admin_permissions = true
+
+  iam_role_additional_policies = {
+    # Anexando a política que permite puxar imagens do ECR
+    ECRReadOnly = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  }
 
   eks_managed_node_groups = {
     default_nodes = {

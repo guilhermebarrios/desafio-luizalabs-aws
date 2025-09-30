@@ -2,42 +2,68 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello
+  labels:
+    app: hello
 spec:
-  replicas: 2
+  replicas: 2 # Número de réplicas do Deployment
   selector:
     matchLabels:
       app: hello
   template:
+    #
     metadata:
       labels:
         app: hello
     spec:
+      imagePullSecrets:
+      # add o secret para puxar imagem privada
+      - name: ecr-credentials
       containers:
+      # LISTA DE CONTAINERS QUE RODARÃO NESTE POD
       - name: hello
+        #image: 288761731142.dkr.ecr.us-east-1.amazonaws.com/hello:latest # URI DO ECR CORRETO
         image: 288761731142.dkr.ecr.us-east-1.amazonaws.com/hello:latest
-
+        imagePullPolicy: Always # Sempre tenta puxar a imagem mais recente
         ports:
-        - containerPort: 8080
-        readinessProbe:
-          httpGet: { path: "/", port: 8080 }
-          initialDelaySeconds: 5
-          periodSeconds: 10
-        livenessProbe:
-          httpGet: { path: "/", port: 8080 }
-          initialDelaySeconds: 20
-          periodSeconds: 10
+        - containerPort: 8080 # Porta que o CONTAINER da aplicação ESCUTA
         resources:
-          requests: { cpu: "100m", memory: "128Mi" }
-          limits: { cpu: "250m", memory: "256Mi" }
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
+        # Health Checks - boas práticas para o Kubernetes saber a saúde do app
+        readinessProbe:
+          # Verifica se o app está PRONTO para receber tráfego
+          httpGet:
+            path: "/" # Endpoint de health check da aplicação
+            port: 8080 # Porta do container que o health check vai acessar
+          initialDelaySeconds: 5 # Espera 5s antes da primeira checagem
+          periodSeconds: 10 # Checa a cada 10s
+          timeoutSeconds: 3 # Tempo limite para a resposta
+          failureThreshold: 3 # Quantas falhas para considerar não pronto
+        livenessProbe:
+          # Verifica se o app está VIVO (se não, o K8s reinicia o container)
+          httpGet:
+            path: "/" # Endpoint de health check da sua aplicação
+            port: 8080 # Porta do container
+          initialDelaySeconds: 20 # Espera 20s antes da primeira checagem (dá tempo para o app inicializar)
+          periodSeconds: 10 # Checa a cada 10s
+          timeoutSeconds: 3 # Tempo limite para a resposta
+          failureThreshold: 3 # Quantas falhas para reiniciar o container
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: hello-svc
-spec:
-  type: LoadBalancer
-  selector:
+  labels:
     app: hello
+spec:
+  type: LoadBalancer # Cria um AWS Load Balancer
+  selector:
+    app: hello # Este Service vai direcionar tráfego para pods com a label "app: hello"
   ports:
-    - port: 80
-      targetPort: 8080
+  - protocol: TCP
+    port: 80 # Porta que o Load Balancer VAI OUVIR (acesso externo)
+    targetPort: 8080 # Porta que o Load Balancer VAI ENVIAR o tráfego para o CONTAINER
