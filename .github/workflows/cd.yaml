@@ -54,7 +54,6 @@ jobs:
         # Comando imperativo para atualizar a imagem e iniciar o rollout
         kubectl set image deployment/hello hello=$IMAGE_URI
 
-
         # Monitorar o status do deploy e garantir que ele terminou com sucesso
         # A pipeline só continuará depois que os novos pods estiverem 'Running'.
         kubectl rollout status deployment/hello
