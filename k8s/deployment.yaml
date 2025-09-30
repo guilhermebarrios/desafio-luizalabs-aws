@@ -1,57 +1,52 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  # O nome deployment. É o que você usa no comando `kubectl rollout restart`.
   name: hello
-  labels:
-    app: hello
 spec:
-  replicas: 2 # Número de réplicas do Deployment
+  # Alta disponibilidade com 2 cópias da aplicação.
+  replicas: 2
   selector:
     matchLabels:
       app: hello
   template:
-    #
     metadata:
       labels:
         app: hello
     spec:
-      imagePullSecrets:
-      # add o secret para puxar imagem privada
-      - name: ecr-credentials
       containers:
-      # LISTA DE CONTAINERS QUE RODARÃO NESTE POD
       - name: hello
-        #image: 288761731142.dkr.ecr.us-east-1.amazonaws.com/hello:latest # URI DO ECR CORRETO
-        image: 288761731142.dkr.ecr.us-east-1.amazonaws.com/hello:latest
-        imagePullPolicy: Always # Sempre tenta puxar a imagem mais recente
+        # A pipeline de CI/CD vai substituir esta linha pela imagem correta e com a tag única.
+        image: SUBTITUIDO_PELA_PIPELINE
+        # Garante que o Kubernetes sempre tente baixar a imagem mais recente do repositório.
+        imagePullPolicy: Always
         ports:
-        - containerPort: 8080 # Porta que o CONTAINER da aplicação ESCUTA
+        - containerPort: 8080
+        # ENGENHARIA (Tunning): Define os recursos que o contêiner precisa e pode usar.
+        # Essencial para o HPA funcionar e para a estabilidade do cluster.
         resources:
           requests:
+            memory: "64Mi"
             cpu: "100m"
-            memory: "128Mi"
           limits:
+            memory: "128Mi"
             cpu: "250m"
-            memory: "256Mi"
-        # Health Checks - boas práticas para o Kubernetes saber a saúde do app
+
+        # MONITORIA (Disponibilidade): Verifica se a aplicação está pronta para receber tráfego.
         readinessProbe:
-          # Verifica se o app está PRONTO para receber tráfego
           httpGet:
-            path: "/" # Endpoint de health check da aplicação
-            port: 8080 # Porta do container que o health check vai acessar
-          initialDelaySeconds: 5 # Espera 5s antes da primeira checagem
-          periodSeconds: 10 # Checa a cada 10s
-          timeoutSeconds: 3 # Tempo limite para a resposta
-          failureThreshold: 3 # Quantas falhas para considerar não pronto
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+
+        # MONITORIA (Disponibilidade): Verifica se a aplicação ainda está "viva" e a reinicia se falhar.
         livenessProbe:
-          # Verifica se o app está VIVO (se não, o K8s reinicia o container)
           httpGet:
-            path: "/" # Endpoint de health check da sua aplicação
-            port: 8080 # Porta do container
-          initialDelaySeconds: 20 # Espera 20s antes da primeira checagem (dá tempo para o app inicializar)
-          periodSeconds: 10 # Checa a cada 10s
-          timeoutSeconds: 3 # Tempo limite para a resposta
-          failureThreshold: 3 # Quantas falhas para reiniciar o container
+            path: /
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service
