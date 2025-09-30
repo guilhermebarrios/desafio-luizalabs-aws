@@ -45,8 +45,8 @@ jobs:
         
     - name: Configura kubectl para o EKS
       run: |
-        aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}
-
+        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }} --role-arn:aws:iam::288761731142:role/github-desafio-role
+       
     - name: Deploy no Kubernetes
       env:
         IMAGE_URI: ${{ steps.build-image.outputs.image_uri }}
