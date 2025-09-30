@@ -44,7 +44,7 @@ module "vpc" {
   }
 }
 
-# Módulo para criar o Cluster EKS
+# Módulo para criar o Cluster EKS ---
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "20.8.4" # Travando em uma versão estável
