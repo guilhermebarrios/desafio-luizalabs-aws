@@ -49,6 +49,8 @@ jobs:
     - name: Deploy no Kubernetes
       env:
         IMAGE_URI: ${{ steps.build-image.outputs.image_uri }}
+        KUBE_MANIFEST_PATH: ./k8s
+        DEPLOYMENT_NAME: hello
       run: |
         #Passo 1: Usando 'sed' para atualizar o template apenas no deployment.yaml
         sed -i "s|image:.*|image: $IMAGE_URI|g" $KUBE_MANIFEST_PATH/deployment.yaml
