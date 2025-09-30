@@ -2,7 +2,7 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: helloworld-hpa
+  name: hello-hpa
 spec:
   # o deployment que será escalado
   scaleTargetRef:
@@ -12,7 +12,7 @@ spec:
   # Regras de escalabilidade
 
   minReplicas: 2 # Mínimo de 2 pods
-  maxReplicas: 10 # Máximo de 10 pods
+  maxReplicas: 6 # Máximo de 6 pods
   metrics:
   - type: Resource
     resource:

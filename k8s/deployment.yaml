@@ -22,7 +22,7 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
-        # ENGENHARIA (Tunning): Define os recursos que o contêiner precisa e pode usar.
+        # Define os recursos que o contêiner precisa e pode usar.
         # Essencial para o HPA funcionar e para a estabilidade do cluster.
         resources:
           requests:
