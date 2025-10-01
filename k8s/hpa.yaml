@@ -21,3 +21,13 @@ spec:
         type: Utilization
         # Gatilho: se a média de uso de CPU dos pods passar de 50%...
         averageUtilization: 50
+  # --- Adicionando pois o HPA demora para remover pods em teste
+  behavior:
+    scaleDown:
+      # Define a janela de espera para apenas 30 segundos
+      stabilizationWindowSeconds: 30 # Espera apenas 30 segundos para considerar a remoção de pods
+      # Define que o HPA pode remover 100% dos pods extras rapidamente
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60

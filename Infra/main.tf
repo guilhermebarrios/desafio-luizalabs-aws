@@ -69,31 +69,16 @@ module "eks" {
 
   # Grupo de nós gerenciados (Managed Node Group)
 
+  # Cria o grupo de nós
   eks_managed_node_groups = {
-    spot_nodes = {
-      instance_types = ["t3.small", "t3.medium"] # Instâncias Spot (baratas), se precisar de mais, adicione mais tipos
-      capacity_type  = "SPOT"
-      min_size       = 1
-      max_size       = 3
-      desired_size   = 3
-      labels = {
-        type = "spot"
-      }
+    # Um único grupo de nós de uso geral usando o Free Tier
+    default_nodes = {
+      instance_types = ["t3.micro"] # 100% Free Tier
+      capacity_type  = "ON_DEMAND"  # Mais estável para a demo
+      min_size       = 2
+      max_size       = 4
+      desired_size   = 3 # Começamos com 3 nós para ter espaço de sobra
     }
-
-    on_demand_nodes = {
-      instance_types = ["t3.micro"] # Free Tier
-      capacity_type  = "ON_DEMAND"
-      min_size       = 1
-      max_size       = 2
-      desired_size   = 1
-      labels = {
-        type = "on-demand"
-      }
-    }
-
-
-
   }
 
   tags = {

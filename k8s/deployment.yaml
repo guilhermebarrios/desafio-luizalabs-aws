@@ -14,14 +14,6 @@ spec:
       labels:
         app: hello
     spec:
-      nodeSelector:
-        type: spot # Garante que o pod só rode em nós com a label "type: spot"
-      tolerations:
-      - key: "spot" # Tolera o taint spot=true
-        operator: "Equal"
-        value: "true"
-        effect: "NoSchedule" # Garante que o pod só rode em nós com o taint spot=true:NoSchedule
-
       containers:
       - name: hello
         # A pipeline de CI/CD vai substituir esta linha pela imagem correta e com a tag única.
