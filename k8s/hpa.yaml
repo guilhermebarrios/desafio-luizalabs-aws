@@ -11,8 +11,8 @@ spec:
     name: hello # O nome do deployment
   # Regras de escalabilidade
 
-  minReplicas: 3 # Mínimo de 3 pods
-  maxReplicas: 6 # Máximo de 6 pods
+  minReplicas: 4 # Mínimo de 4 pods
+  maxReplicas: 7 # Máximo de 7 pods
   metrics:
   - type: Resource
     resource:

@@ -73,11 +73,11 @@ module "eks" {
   eks_managed_node_groups = {
     # Um único grupo de nós de uso geral usando o Free Tier
     default_nodes = {
-      instance_types = ["t3.micro"] # 100% Free Tier
-      capacity_type  = "ON_DEMAND"  # Mais estável para a demo
-      min_size       = 2
-      max_size       = 4
-      desired_size   = 3 # Começamos com 3 nós para ter espaço de sobra
+      instance_types = ["t3.small"] # 100% Free Tier
+      capacity_type  = "ON_DEMAND"  # Mais estável para a demonstração
+      min_size       = 1
+      max_size       = 5
+      desired_size   = 4 # Começa com 4 nós
     }
   }
 

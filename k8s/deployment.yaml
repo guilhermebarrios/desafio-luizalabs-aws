@@ -5,7 +5,7 @@ metadata:
   name: hello
 spec:
   # Alta disponibilidade com 2 cópias da aplicação.
-  replicas: 3
+  replicas: 4
   selector:
     matchLabels:
       app: hello
