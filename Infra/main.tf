@@ -76,13 +76,6 @@ module "eks" {
       min_size       = 1
       max_size       = 3
       desired_size   = 3
-      taints = [
-        {
-          key    = "spot"
-          value  = "true"
-          effect = "NO_SCHEDULE"
-        }
-      ]
       labels = {
         type = "spot"
       }
