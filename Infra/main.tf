@@ -67,14 +67,40 @@ module "eks" {
     ECRReadOnly = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   }
 
+  # Grupo de nós gerenciados (Managed Node Group)
+
   eks_managed_node_groups = {
-    default_nodes = {
-      instance_types = ["t3.small"]
+    spot_nodes = {
+      instance_types = ["t3.small", "t3.medium"] # Instâncias Spot (baratas), se precisar de mais, adicione mais tipos
       capacity_type  = "SPOT"
       min_size       = 1
       max_size       = 3
       desired_size   = 3
+      taints = [
+        {
+          key    = "spot"
+          value  = "true"
+          effect = "NO_SCHEDULE"
+        }
+      ]
+      labels = {
+        type = "spot"
+      }
     }
+
+    on_demand_nodes = {
+      instance_types = ["t3.micro"] # Free Tier
+      capacity_type  = "ON_DEMAND"
+      min_size       = 1
+      max_size       = 2
+      desired_size   = 1
+      labels = {
+        type = "on-demand"
+      }
+    }
+
+
+
   }
 
   tags = {
