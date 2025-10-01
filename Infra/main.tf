@@ -32,11 +32,11 @@ module "vpc" {
 
   # Dentro do module "vpc"
   public_subnet_tags = {
-    "kubernetes.io/cluster/cluster-desafio-luizalabs-v2" = "shared" # <--- Atualize aqui
+    "kubernetes.io/cluster/cluster-desafio-luizalabs-v2" = "shared" # <--- Importante para o EKS reconhecer as subnets
     "kubernetes.io/role/elb"                             = "1"
   }
   private_subnet_tags = {
-    "kubernetes.io/cluster/cluster-desafio-luizalabs-v2" = "shared" # <--- E aqui também
+    "kubernetes.io/cluster/cluster-desafio-luizalabs-v2" = "shared" # <--- Importante para o EKS reconhecer as subnets
     "kubernetes.io/role/internal-elb"                    = "1"
   }
 
@@ -70,9 +70,10 @@ module "eks" {
   eks_managed_node_groups = {
     default_nodes = {
       instance_types = ["t3.small"]
+      capacity_type  = "SPOT"
       min_size       = 1
       max_size       = 3
-      desired_size   = 2
+      desired_size   = 3
     }
   }
 
