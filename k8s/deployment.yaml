@@ -14,6 +14,8 @@ spec:
       labels:
         app: hello
     spec:
+      nodeSelector:
+        type: spot # Garante que o pod só rode em nós com a label "type: spot"
       containers:
       - name: hello
         # A pipeline de CI/CD vai substituir esta linha pela imagem correta e com a tag única.
@@ -47,14 +49,6 @@ spec:
             port: 8080
           initialDelaySeconds: 20
           periodSeconds: 10
-
-        # Permite que os pods sejam agendados em nós spot (preemptivos).
-
-        tolerations:
-      - key: spot
-        operator: Equal
-        value: true
-        effect: NoSchedule
 ---
 apiVersion: v1
 kind: Service
