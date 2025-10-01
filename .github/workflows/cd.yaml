@@ -25,10 +25,9 @@ jobs:
     - name: Configura credenciais AWS
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
-      
+        role-to-assume: arn:aws:iam::288761731142:role/github-desafio-role #Arn da role criada no desafio
+        aws-region: us-east-1 #Região onde está o EKS e ECR
+              
     - name: Login no Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
