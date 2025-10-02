@@ -40,14 +40,14 @@ jobs:
     - name: Terraform Plan
       run: terraform -chdir=${{ env.TF_WORKING_DIR }} plan -out=tfplan
 
-    # --- INÍCIO DA MELHORIA ---
+    # Salva o plano gerado como um artefato para uso posterior
     - name: Upload do Artefato do Plano
       # Salva o arquivo 'tfplan' para ser usado mais tarde
       uses: actions/upload-artifact@v4
       with:
         name: tfplan
         path: ${{ env.TF_WORKING_DIR }}/tfplan
-    # --- FIM DA MELHORIA ---
+    #
 
     - name: Terraform Apply
       # Roda 'apply' APENAS em push para a branch 'main'

@@ -58,7 +58,7 @@ module "eks" {
   subnet_ids = module.vpc.private_subnets # Nós apenas em subnets privadas
 
   cluster_endpoint_public_access       = true
-  cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"] # Altere aqui!
+  cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"] # Deixei aberto para facilitar a demonstração, porém deixei pronto para restringir
 
   enable_cluster_creator_admin_permissions = true
 
@@ -74,7 +74,7 @@ module "eks" {
     # Um único grupo de nós de uso geral usando o Free Tier
     default_nodes = {
       instance_types = ["t3.small"] # 100% Free Tier
-      capacity_type  = "ON_DEMAND"  # Mais estável para a demonstração
+      capacity_type  = "ON_DEMAND"  # Mais estável para a demonstração, pois o spot pode ser removido a qualquer momento
       min_size       = 1
       max_size       = 7
       desired_size   = 4 # Começa com 4 nós
@@ -96,8 +96,8 @@ resource "aws_ecr_repository" "app_ecr_repo" {
   # As tags podem ser sobrescritas (ex: a tag :latest)
   image_tag_mutability = "IMMUTABLE" # Não permite sobrescrever tags (melhor prática)
 
-  # Força a deleção do repositório mesmo que ele tenha imagens dentro. (destruir tudo facilmente)
-  force_delete = true
+  # Força a deleção do repositório mesmo que ele tenha imagens dentro. (destruir tudo facilmente) pensando no ambiente de demonstração
+  force_delete = true # ambiente de teste seria false
 
   tags = {
     Environment = "desafio-devops"

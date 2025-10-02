@@ -14,8 +14,8 @@ spec:
         app: load-generator
     spec:
       containers:
-      - name: load-generator-container
-        image: busybox
+      - name: load-generator-container # Nome do contêiner
+        image: busybox # Imagem leve do BusyBox
         # Gerando a carga contínua no serviço
         command: [ "/bin/sh", "-c" ]
         args: [ "while true; do wget -q -O- http://hello-svc; done" ]
