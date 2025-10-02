@@ -4,9 +4,9 @@ name: CI/CD - Infraestrutura com Terraform
 on:
   push:
     branches: [ main ]
-    paths: [ 'infra/**' ]
+    paths: [ 'Infra/**' ]
   pull_request:
-    paths: [ 'infra/**' ]
+    paths: [ 'Infra/**' ]
 
 env:
   TF_WORKING_DIR: ./infra
