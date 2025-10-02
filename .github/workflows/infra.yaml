@@ -9,7 +9,7 @@ on:
     paths: [ 'Infra/**' ]
 
 env:
-  TF_WORKING_DIR: ./infra
+  TF_WORKING_DIR: ./Infra
 
 jobs:
   terraform:
