@@ -56,7 +56,6 @@ jobs:
         
         # Passo 2: Aplica apenas os arquivos da aplicação principal, um por um
         kubectl apply -f $KUBE_MANIFEST_PATH/deployment.yaml
-        kubectl apply -f $KUBE_MANIFEST_PATH/service.yaml
         kubectl apply -f $KUBE_MANIFEST_PATH/hpa.yaml
         # --------------------
         
