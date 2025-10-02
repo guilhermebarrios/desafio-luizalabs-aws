@@ -4,7 +4,7 @@ metadata:
   # O nome deployment. É o que você usa no comando `kubectl rollout restart`.
   name: hello
 spec:
-  # Alta disponibilidade com 2 cópias da aplicação.
+  # Alta disponibilidade com 4 cópias da aplicação.
   replicas: 4
   selector:
     matchLabels:

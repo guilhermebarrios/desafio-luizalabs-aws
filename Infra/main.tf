@@ -76,7 +76,7 @@ module "eks" {
       instance_types = ["t3.small"] # 100% Free Tier
       capacity_type  = "ON_DEMAND"  # Mais estável para a demonstração
       min_size       = 1
-      max_size       = 5
+      max_size       = 7
       desired_size   = 4 # Começa com 4 nós
     }
   }
@@ -94,7 +94,7 @@ resource "aws_ecr_repository" "app_ecr_repo" {
   name = "hello"
 
   # As tags podem ser sobrescritas (ex: a tag :latest)
-  image_tag_mutability = "MUTABLE"
+  image_tag_mutability = "IMMUTABLE" # Não permite sobrescrever tags (melhor prática)
 
   # Força a deleção do repositório mesmo que ele tenha imagens dentro. (destruir tudo facilmente)
   force_delete = true

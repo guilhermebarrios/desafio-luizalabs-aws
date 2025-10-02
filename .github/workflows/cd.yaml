@@ -53,10 +53,14 @@ jobs:
       run: |
         #Passo 1: Usando 'sed' para atualizar o template apenas no deployment.yaml
         sed -i "s|image:.*|image: $IMAGE_URI|g" $KUBE_MANIFEST_PATH/deployment.yaml
-
-        # Passo 2: criar OU atualizar todos os recursos da pasta
-        kubectl apply -f $KUBE_MANIFEST_PATH
-
+        
+        # Passo 2: Aplica apenas os arquivos da aplicação principal, um por um
+        kubectl apply -f $KUBE_MANIFEST_PATH/deployment.yaml
+        kubectl apply -f $KUBE_MANIFEST_PATH/service.yaml
+        kubectl apply -f $KUBE_MANIFEST_PATH/hpa.yaml
+        # --------------------
+        
+        echo "Aguardando o rollout da nova versão ser concluído..."
         # Passo 3: Verifica o status do deploy específico que foi alterado
         kubectl rollout status deployment/$DEPLOYMENT_NAME
 
