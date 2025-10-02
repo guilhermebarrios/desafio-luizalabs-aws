@@ -28,7 +28,7 @@ jobs:
         role-to-assume: arn:aws:iam::288761731142:role/github-desafio-role #Arn da role criada no desafio
         aws-region: us-east-1 #Região onde está o EKS e ECR
               
-    - name: Login no Amazon ECR
+    - name: Login no Amazon ECR #CONECTANDO NO REPOSITÓRIO ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
 

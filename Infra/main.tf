@@ -13,7 +13,7 @@ terraform {
 # Configuração do provider 
 provider "aws" {
   region = "us-east-1"
-}
+  }
 
 # Módulo para criar a VPC (Rede)
 module "vpc" {
